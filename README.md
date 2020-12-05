@@ -161,3 +161,218 @@
 >   ```
 >
 >   
+
+********************
+
+## vue-project
+
+> ### my_api_test
+>
+> * 建立
+>
+> > * 第一步：执行 'vue ui' 指令进入图像化界面
+> >
+> > * 第二步：新建项目
+> >
+> > * 第三步：安装axios插件
+> >
+> > * 第四步：完成创建
+>
+> * 界面路由跳转
+>
+> > * 第一步：在路由index.js中添加新建的vue component
+> >
+> >   ```json
+> >   {
+> >       path: '/pathparapass',
+> >       name: "第一条结果",
+> >       component: PathParaPass //这个vue元素要在index.js的最上面引入
+> >   }
+> >   ```
+> >
+> > * 第二步：执行跳转函数
+> >
+> >   ```bash
+> >   this.$router.push({
+> >   	path: '/destination'
+> >   })
+> >   ```
+>
+> * 路径参数传递
+>
+> > * 参数发送
+> >
+> >   ```bash
+> >   this.$router.push({
+> >   	path: '/destination',
+> >   	query: {
+> >   		id: 3,
+> >   		name: "IzumiSakai"
+> >   	}
+> >   })
+> >   ```
+> >
+> > * 参数读取
+> >
+> >   ```bash
+> >   this.$route.query.id
+> >   this.$route.query.name
+> >   ```
+> >
+> > * 参数格式(?拼接格式)
+> >
+> >   ```bash
+> >   api?id=3&name=IzumiSakai
+> >   ```
+>
+> * 通过$store传递json对象
+>
+> > * 传递思想
+> >
+> >   ```bash
+> >   使用vue全局的$store对象，先将对象存入$store中，在从中读取出来
+> >   ```
+> >
+> > * 第一步： 在$store的index.js中声明如下
+> >
+> >   ```bash
+> >   person: {
+> >   }
+> >   ```
+> >
+> > * 第二步：发送对象
+> >
+> >   ```bash
+> >   this.$store.person=this.person //其中this.person为定义好的json对象
+> >   ```
+> >
+> > * 第三步：接收对象
+> >
+> >   ```bash
+> >   this.$store.person
+> >   ```
+> >
+> > * 缺点
+> >
+> >   ```bash
+> >   每次刷新后就没了，$store一定要页面跳转才有效
+> >   ```
+>
+> * 通过router传递寄送对象
+>
+> > * 传递思想
+> >
+> >   ```bash
+> >   在传送时对对象进行编码，编码成字符串传送
+> >   在接收时对对象进行解码，解码成对象接收
+> >   ```
+> >
+> > * 发送
+> >
+> >   ```bash
+> >   this.$router.push({
+> >   	path: '/objectpassbyrouter',
+> >   	query: {
+> >   		person: JSON.stringify(this.person)
+> >   	}
+> >   })
+> >   ```
+> >
+> > * 接收
+> >
+> >   ```bash
+> >   person: JSON.parse(this.$route.query.person)
+> >   ```
+>
+> * axios发送请求
+>
+> > * GET
+> >
+> >   ```bash
+> >   axios.get("/song/sonngs").then(response => {
+> >   	this.songs=response.data.data.sonngs
+> >   });
+> >   ```
+> >
+> > * DELETE
+> >
+> >   ```bash
+> >   axios.delete('/song/songs/'+id).then(response => {
+> >   	console.log(response);
+> >   });
+> >   ```
+> >
+> > * POST
+> >
+> >   ```json
+> >   // data中song的格式
+> >   song: {
+> >           id: null,
+> >           name: 'song_name',
+> >           singer: 'song_singer',
+> >           feeling: 'song_feeling'
+> >   }
+> >   
+> >   axios.post('/song/songs',this.song).then(response => {
+> >       console.log(response)
+> >   })
+> >   ```
+> >
+> > * PUT
+> >
+> >   ```json
+> >   // data中song的格式
+> >   song: {
+> >           id: 10, //根据id删除，id十分重要
+> >           name: 'song_name',
+> >           singer: 'song_singer',
+> >           feeling: 'song_feeling'
+> >   }
+> >   
+> >   axios.put('/song/songs',this.song).then(response => {
+> >       console.log(response)
+> >   })
+> >   ```
+>
+> * 跨域问题解决
+>
+> > * 解决思路：使用代理
+> >
+> > * 第一步： 因为vue-cli 3没有配置选项，因此要在根目录下新建 'vue.config.js' 配置文件
+> >
+> > * 修改配置文件内容
+> >
+> >   ```bash
+> >   module.exports = {
+> >       devServer: {
+> >           open: true, //是否自动弹出浏览器页面
+> >           host: "localhost",
+> >           port: '8081',
+> >           https: false,   //是否使用https协议
+> >           hotOnly: false, //是否开启热更新
+> >           proxy: {
+> >               '/song': {
+> >                   target: 'http://47.108.63.126',
+> >                   ws: true,
+> >                   changeOrigin: true,
+> >                   pathRewrite: {
+> >                       '^/song':''
+> >                   }
+> >               }
+> >           }
+> >       }
+> >   }
+> >   
+> >   ```
+> >
+> > * 结果
+> >
+> >   ```bash
+> >   发出的api地址： '/song/songs'
+> >   实际访问的api地址： 'http://47.108.63.126/songs'
+> >   
+> >   原理：所有以 '^/song' 开头的请求都走代理路径，将 '^/song' 变成 '' , 在拼上IP地址形成最终访问的api地址
+> >   ```
+> >
+> >   
+
