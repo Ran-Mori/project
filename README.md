@@ -1,168 +1,248 @@
 # Project
+
 用来存放个人项目的仓库
 
 ## java-project
 
-> ### FOR_CRUD
->
-> * 功能：实现一个基本的CRUD操作，让V前端调用用于VUE的学习
->
-> * 接口
->
->   ```json
->   # ip = localhost 
->   # port = 80
->   ```
->   **********************
->   ```json
->   func: 查询所有
->   method： GET
->   url:http://ip:port/songs
->   request_param: null
->   request_body: null
->   respond_body: 
->   {
->       "code": 200,
->       "message": "访问成功",
->       "data": {
->           "songs": [
->               {
->                   "id": 2,
->                   "name": "Forever You",
->                   "singer": "Zard",
->                   "feeling": "soft"
->               },
->               {
->                   "id": 3,
->                   "name": "枫",
->                   "singer": "周杰伦",
->                   "feeling": "像秋天的感觉"
->               }
->           ]
->       }
->   }
->   ```
->   *************************
->   ```json  
->   func: 根据id查询一个
->   method: GET
->   url: http://ip:port/songs/1
->   request_param: 1
->   request_body: null
->   responde_body:
->   {
->       "code": 200,
->       "message": "访问成功",
->       "data": {
->           "song": {
->               "id": 3,
->               "name": "枫",
->               "singer": "周杰伦",
->               "feeling": "像秋天的感觉"
->           }
->       }
->   }
->   ```
->
->   ```json
->   func:新增一个
->   method: POST
->   url: http://ip:port/songs
->   request_param: null
->   request_body: 
->   {
->       "id": 10, //id值任意无所谓，因为是自增的
->       "name": "等你下课",
->       "singer": "周杰伦",
->       "feeling": "高中的感觉"
->   }
->   respond_body:
->   {
->       "code": 200,
->       "message": "访问成功",
->       "data": {}
->   }
->   ```
->   
->   ****************
->   
->   ```json
->   func: 根据id删除
->   method: DELETE
->   url: http://ip:port/songs/1
->   request_param: 1
->   request_body: null
->   responde_body:
->   {
->       "code": 200,
->       "message": "访问成功",
->       "data": {}
->   }
->   ```
->   
->   *****************
->   
->   ```json
->   func: 修改一个
->   method: PUT
->   url: http://ip:port/songs
->   request_param: null
->   request_body:
->   {
->       "id": 4, //id值是最重要的，是根据id来删除
->       "name": "等你下课",
->       "singer": "周杰伦",
->       "feeling": "高中的感觉"
->   }
->   respond_body:
->   {
->       "code": 200,
->       "message": "访问成功",
->       "data": {}
->   }
->   ```
->   
-> * 坑
->
->   ```json
->   [
->       {
->           "question": "MySQL 插入数据中含有中文时抱错插入失败",
->           "answer"："mysql的console中执行如下语句 'alter table for_crud.song CONVERT TO CHARACTER SET utf8;'"
->       },
->       {
->           "question": "springboot如何读取 '/songs/{id}'中的id变量",
->           "answer": "使用@PathVirable注解"
->       },
->       {
->           "question":  "postman测试含有@RequestBody接口时总是报415错",
->           "answer" "postman测试工具要将 'text' 改成 'json'"
->       },
->       {
->           "question": "Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project izumisakai-zy: Fatal error compiling",
->           "answer":
->           {
->           	"措施": "在pom中添加一个依赖",
->               "依赖内容": "//<plugin>
->               		//		<groupId>org.apache.maven.plugins</groupId>
->               		//		<artifactId>maven-compiler-plugin</artifactId>
->               		//		<version>3.8.1</version>
->               		//		<configuration>
->                   	//			<source>1.8</source>
->                   	//			<target>1.8</target>
->               		//		</configuration>
->           			//	</plugin>"
->           }
->       }
->   ]
->   
->   
->   
->   ```
->
->   
+### FOR_CRUD
 
-********************
+> #### 功能
+>
+> * 实现一个基本的CRUD操作，让前端调用，用于VUE的学习
+>
+> #### 接口
+>
+> ```json
+> # ip = localhost 
+> # port = 80
+> ```
+>
+> ```json
+> func: 查询所有
+> method： GET
+> url:http://ip:port/songs
+> request_param: null
+> request_body: null
+> respond_body: 
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {
+>         "songs": [
+>             {
+>                 "id": 2,
+>                 "name": "Forever You",
+>                 "singer": "Zard",
+>                 "feeling": "soft"
+>             },
+>             {
+>                 "id": 3,
+>                 "name": "枫",
+>                 "singer": "周杰伦",
+>                 "feeling": "像秋天的感觉"
+>             }
+>         ]
+>     }
+> }
+> ```
+>
+> *************************
+>
+> ```json  
+> func: 根据id查询一个
+> method: GET
+> url: http://ip:port/songs/1
+> request_param: 1
+> request_body: null
+> responde_body:
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {
+>         "song": {
+>             "id": 3,
+>             "name": "枫",
+>             "singer": "周杰伦",
+>             "feeling": "像秋天的感觉"
+>         }
+>     }
+> }
+> ```
+>
+> ```json
+> func:新增一个
+> method: POST
+> url: http://ip:port/songs
+> request_param: null
+> request_body: 
+> {
+>     "id": 10, //id值任意无所谓，因为是自增的
+>     "name": "等你下课",
+>     "singer": "周杰伦",
+>     "feeling": "高中的感觉"
+> }
+> respond_body:
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {}
+> }
+> ```
+>
+> ****************
+>
+> ```json
+> func: 根据id删除
+> method: DELETE
+> url: http://ip:port/songs/1
+> request_param: 1
+> request_body: null
+> responde_body:
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {}
+> }
+> ```
+>
+> *****************
+>
+> ```json
+> func: 修改一个
+> method: PUT
+> url: http://ip:port/songs
+> request_param: null
+> request_body:
+> {
+>     "id": 4, //id值是最重要的，是根据id来删除
+>     "name": "等你下课",
+>     "singer": "周杰伦",
+>     "feeling": "高中的感觉"
+> }
+> respond_body:
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {}
+> }
+> ```
+>
+> #### 坑
+>
+> ```json
+> [
+>     {
+>         "question": "MySQL 插入数据中含有中文时抱错插入失败",
+>         "answer"："mysql的console中执行如下语句 'alter table for_crud.song CONVERT TO CHARACTER SET utf8;'"
+>     },
+>     {
+>         "question": "springboot如何读取 '/songs/{id}'中的id变量",
+>         "answer": "使用@PathVirable注解"
+>     },
+>     {
+>         "question":  "postman测试含有@RequestBody接口时总是报415错",
+>         "answer" "postman测试工具要将 'text' 改成 'json'"
+>     },
+>     {
+>         "question": "Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.8.1:compile (default-compile) on project izumisakai-zy: Fatal error compiling",
+>         "answer":
+>         {
+>         	"措施": "在pom中添加一个依赖",
+>             "依赖内容": "//<plugin>
+>             		//		<groupId>org.apache.maven.plugins</groupId>
+>             		//		<artifactId>maven-compiler-plugin</artifactId>
+>             		//		<version>3.8.1</version>
+>             		//		<configuration>
+>                 	//			<source>1.8</source>
+>                 	//			<target>1.8</target>
+>             		//		</configuration>
+>         			//	</plugin>"
+>         }
+>     }
+> ]
+> ```
+>
+> ***
+
+### netease_music
+
+> #### 功能
+>
+> * 客户端上传音乐到服务器
+> * 服务器提供音乐给客户端播放
+> * 服务器存储音乐的相关信息
+>
+> #### 接口
+>
+> ```json
+> func: 上传音乐
+> method: POST
+> url: http://ip:port/song/upload
+> request_param: null
+> request_body: 
+> {
+>     "file": "周杰伦 - 半岛铁盒.mp3" #上传的是一个文件，写在requestBody体主要是为了方便
+> }
+> responde_body:
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {}
+> }
+> ```
+>
+> ***
+>
+> ```json
+> func: 下载音乐
+> method: GET
+> url: http://ip:port/song/download
+> request_param: 
+> {
+>     "singer": "周杰伦",
+>     "songname": "半岛铁盒" #此方法是将音乐流传给浏览器播放，并不一定要下载
+> }
+> responde_body:
+> {
+>     "code": 200,
+>     "message": "访问成功",
+>     "data": {}
+> }
+> ```
+>
+> #### 坑
+>
+> ```json
+> [
+>     {
+>         "question":"springboot的依赖总是不对"，
+>         "answer":"不要自己配，去之前的GitHub抄"
+>     },
+>     {
+>         "question":"springboot默认只能传输1M大小的文件",
+>         "anwser":"修改配置"
+>             spring:
+>               servlet:
+>                 multipart:
+>                   max-file-size: 30MB
+>                   max-request-size: 30MB
+>     }，
+>     {
+>     	"question":"docker装MySQL启动不了，或者初始化困难"，
+>     	"answer":"看docker.md文档，照着文档抄"
+>     },
+> 	{
+>         "question":"显示某个组件没有注入容器",
+>         "anwser":"在主类里面加@BasePackageScan注解"
+>     },
+> 	{
+>         "question":"数据库insert操作提示miss type match",
+>         "anwser":"直接原因是插入的类没有设置主键，根本原因是实体类没加mybatis plus的@TableId注解"
+>     }
+> ]
+> ```
+>
+> ***
 
 ## vue-project
 
