@@ -30,16 +30,31 @@ public class Song implements Serializable {
     public Song() {
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
     public void setId(Integer id) {
-    this.id = id;
-  }
+        this.id = id;
+    }
 
-  public void setSinger(String singer) {
-    this.singer = singer;
-  }
+    public String getSinger() {
+        return singer;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setSinger(String singer) {
+        this.singer = singer;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 }

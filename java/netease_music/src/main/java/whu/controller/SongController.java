@@ -3,20 +3,19 @@ package whu.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.web.multipart.MultipartFile;
 import whu.constant.CommonResult;
+import whu.constant.MyURLEncoder;
 import whu.constant.ResultCode;
 import whu.entity.Song;
 import whu.mapper.SongMapper;
-import whu.service.ISongService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.net.URLEncoder;
+import java.util.List;
 
 /**
  * <p>
@@ -27,7 +26,6 @@ import java.net.URLEncoder;
  * @since 2021-03-25
  */
 @RestController
-@RequestMapping("/song")
 public class SongController {
     final String basePath = "/home/music/";
 
@@ -35,7 +33,7 @@ public class SongController {
     private SongMapper songMapper;
 
     //歌曲上传
-    @PostMapping("/upload")
+    @PostMapping("/song/upload")
     public CommonResult upload(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
         //获取原始文件名
         String originalFilename = file.getOriginalFilename();
@@ -72,7 +70,7 @@ public class SongController {
     }
 
     //获取下载
-    @GetMapping("/download")
+    @GetMapping("/song/download")
     public CommonResult downloadFile(@RequestParam("songname") String songName,
                              @RequestParam("singer") String singer,
                              HttpServletResponse response) {
@@ -87,9 +85,11 @@ public class SongController {
             try (FileInputStream fis = new FileInputStream(file);
                  BufferedInputStream bis = new BufferedInputStream(fis)) {
                 response.setContentType("application/force-download");
+                response.setHeader("cache-control","max-age=31536000");
                 //保证下载时文件名为指定文件名，避免中文文件名乱码
                 response.addHeader("Content-Disposition", "attachment;fileName="
-                        + URLEncoder.encode(file.getName(), "utf-8"));
+                        + MyURLEncoder.encode(file.getName(), "utf-8"));
+                String fileName = file.getName();
                 OutputStream os = response.getOutputStream();
                 StreamUtils.copy(bis, os);
             } catch (Exception e) {
@@ -100,8 +100,36 @@ public class SongController {
         return CommonResult.success();
     }
 
+    @GetMapping("/song/{id}")
+    public CommonResult getSongById(@PathVariable("id") Integer id){
+        Song song = null;
+        try {
+            song = songMapper.selectById(id);
+        }catch (Exception e){
+            return CommonResult.fail(ResultCode.FAIL_TO_SELECT);
+        }
+        if (song == null)
+            return CommonResult.fail(ResultCode.SELECT_NULL);
+        else
+            return CommonResult.success().add("song",song);
+    }
+    //查询所有
+    @GetMapping("/songs")
+    public CommonResult getAllSongs(){
+        List<Song> songs = null;
+        try {
+            songs = songMapper.selectList(null);
+        }catch (Exception e){
+            return CommonResult.fail(ResultCode.FAIL_TO_SELECT);
+        }
+        if (songs != null)
+            return CommonResult.success().add("songs",songs);
+        else
+            return CommonResult.fail(ResultCode.SELECT_NULL);
+    }
+
     //批量文件上传
-    @PostMapping(path = "/uploads")
+    @PostMapping(path = "/song/uploads")
     public CommonResult uploadFiles(@RequestParam("file") MultipartFile[] files, HttpServletResponse response) {
         boolean result = true;
         StringBuilder stringBuilder = new StringBuilder();
