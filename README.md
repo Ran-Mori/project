@@ -480,15 +480,15 @@
 >   server {
 >       listen       80;
 >       server_name  localhost;
->   
+>
 >       #charset koi8-r;
 >       access_log  /var/log/nginx/host.access.log  main;
 >       error_log  /var/log/nginx/error.log  error;
->   
+>
 >       location /api/ {
 >           proxy_pass http://47.108.63.126:8001/;
 >       }
->   	
+>
 >   	#配置了根路径
 >       location / {
 >           root   /usr/share/nginx/html;
@@ -535,6 +535,18 @@
 >  {
 >      "question":"nginx配置反向代理失败",
 >      "anwser":"配置的内容要加分号；配置的url不能加'^'符号，和vue的不一样；配置的proxy_pass最后的'/'是否应该添加？详细情况看上面的正确示范"
+>  },
+>  {
+>      "question":"播放暂停功能总是实现不了",
+>      "answer":"js的if-else必须要打大括号，不打大括号实现不了，卡了好久"
+>  },
+>  {
+>      "question":"获取行的索引而非id",
+>      "answer":"scope.$index。一定要加$符号"
+>  },
+>  {
+>      "question":"自动播放下一曲结果总是重复播放",
+>      "answer":"有些HTML属性设置成false也没有用，要直接把它删除掉，不然就会生效"
 >  }
 > ]
 > ```
