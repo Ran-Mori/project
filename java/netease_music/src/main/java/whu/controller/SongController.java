@@ -35,6 +35,7 @@ public class SongController {
     //歌曲上传
     @PostMapping("/song/upload")
     public CommonResult upload(@RequestParam("file") MultipartFile file, HttpServletResponse response) {
+        System.out.println("收到上传音乐的请求");
         //获取原始文件名
         String originalFilename = file.getOriginalFilename();
         //获取歌手名
@@ -117,8 +118,10 @@ public class SongController {
     @GetMapping("/songs")
     public CommonResult getAllSongs(){
         List<Song> songs = null;
+        QueryWrapper wrapper = new QueryWrapper();
+        wrapper.orderByDesc("id");
         try {
-            songs = songMapper.selectList(null);
+            songs = songMapper.selectList(wrapper);
         }catch (Exception e){
             return CommonResult.fail(ResultCode.FAIL_TO_SELECT);
         }
