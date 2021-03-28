@@ -23,9 +23,6 @@
             action="/api/song/upload"
             accept="*/*"
             ref="upload"
-            :on-preview="handlePreview"
-            :on-remove="handleRemove"
-            :before-remove="beforeRemove"
           >
             <el-button
               :span="3"
@@ -33,6 +30,9 @@
               type="info"
               class="el-icon-plus bg"
               round
+              :on-preview="handlePreview"
+              :on-remove="handleRemove"
+              :before-remove="beforeRemove"
               >上传音乐</el-button
             >
           </el-upload>
@@ -54,7 +54,6 @@
           }"
           :row-style="{ background: '#2b2b2b', color: '#D3D3D3' }"
           :data="songs"
-          :cell-mouse-enter="cellMouseEnter(row)"
           style="width: 110%"
         >
           <el-table-column
@@ -68,10 +67,14 @@
             label="歌手"
             :width="screen_width * 0.3"
           >
-          </el-table-column >
+          </el-table-column>
           <el-table-column prop="name" label="歌名" :width="screen_width * 0.3">
           </el-table-column>
-          <el-table-column label="播放" :width="screen_width * 0.18" align="center">
+          <el-table-column
+            label="播放"
+            :width="screen_width * 0.18"
+            align="center"
+          >
             <template slot-scope="scope">
               <el-button
                 class="el-icon-service"
@@ -106,7 +109,11 @@
             icon="el-icon-caret-right"
             @click="nextPlay()"
           ></el-button>
-          <el-progress :percentage="30" status="exception"></el-progress>
+          <el-progress
+            :percentage="this.percent"
+            :stroke-width="2"
+            status="exception"
+          ></el-progress>
         </el-row>
       </el-footer>
     </el-container>
@@ -202,43 +209,29 @@
 .uploadbutton {
   background: red;
 }
-::v-deep .el-upload-list__item-name{
-  display: none ! important;
+::v-deep .stroke-width {
+  line-height: 1.5;
 }
-::v-deep .el-icon-upload-success{
-  display: none ! important;
+::v-deep .el-progress-bar {
+  width: 95%;
 }
-::v-deep .el-icon-circle-check{
-  display: none ! important;
+::v-deep .el-progress-bar__outer {
+  background-color: #464646;
 }
-::v-deep .el-upload .el-upload--text{
-  display: none ! important;
+::v-deep .el-upload-list__item-name {
+  display: none !important;
 }
-.el-row {
-  margin-bottom: 20px;
-  &:last-child {
-    margin-bottom: 0;
-  }
+::v-deep .el-icon-upload-success {
+  display: none !important;
 }
-.el-col {
-  border-radius: 4px;
+::v-deep .el-icon-circle-close {
+  display: none !important;
 }
-.bg-purple-dark {
-  background: #99a9bf;
+::v-deep .el-icon-circle-check {
+  display: none !important;
 }
-.bg-purple {
-  background: #d3dce6;
-}
-.bg-purple-light {
-  background: #e5e9f2;
-}
-.grid-content {
-  border-radius: 4px;
-  min-height: 36px;
-}
-.row-bg {
-  padding: 10px 0;
-  background-color: #f9fafc;
+::v-deep .el-upload .el-upload--text {
+  display: none !important;
 }
 </style>
 
@@ -250,7 +243,9 @@ export default {
       songs: [],
       srcs: [],
       index: 0,
-      fileList:null,
+      fileList: null,
+      timer: "",
+      percent: 0,
     };
   },
   created() {
@@ -267,6 +262,9 @@ export default {
       }
       this.$refs.audio.src = this.srcs[0];
       this.index = songs.length - 1;
+      window.setInterval(() => {
+        setTimeout(this.getNewMessage(), 0);
+      }, 1000);
     });
     this.screen_width = document.body.scrollWidth * 0.9;
   },
@@ -295,13 +293,21 @@ export default {
       this.index = (this.index + 1) % this.srcs.length;
       this.playSong(this.index);
     },
-    cellMouseEnter: function (row) {
-      console.log("enter");
-      console.log(row);
-    },
     playAll: function () {
       this.playSong(0);
     },
+    getNewMessage: function () {
+      this.percent =
+        (this.$refs.audio.currentTime * 100) / this.$refs.audio.duration;
+    },
+  },
+  mounted() {
+    var that = this;
+    document.onkeydown = function (e) {
+      if (window.event.keyCode == 32) {
+        that.playAndPause();
+      }
+    };
   },
 };
 </script>
