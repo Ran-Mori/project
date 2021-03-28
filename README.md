@@ -502,7 +502,13 @@
 >           root   /usr/share/nginx/html;
 >       }
 >   }
+>   client_max_body_size 30m;
 >   ```
+>
+> * Nginx同样限制了上传的大小为1M
+>   * nginx主配置文件在 `/etc/nginx/nginx.conf`，这个配置文件又包括了此default.conf
+>   * 且http是server的父标签
+>   * 只用在server最下面加上一行`client_max_body_size 30m; `就可以
 >
 > #### 坑
 >
@@ -547,6 +553,10 @@
 >  {
 >      "question":"自动播放下一曲结果总是重复播放",
 >      "answer":"有些HTML属性设置成false也没有用，要直接把它删除掉，不然就会生效"
+>  },
+>  {
+>      "question":"css设置总是不显示效果",
+>      "answer":"因为class类标签不是原生的，要添加 '::v-deep'"
 >  }
 > ]
 > ```
