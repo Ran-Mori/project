@@ -11,6 +11,7 @@
             size="small"
             type="danger"
             class="el-icon-caret-right"
+            :show-file-list="false"
             @click="playAll()"
             :style="{ background: '#EC4141', paddingLeft: '15px' }"
             round
@@ -22,7 +23,9 @@
             action="/api/song/upload"
             accept="*/*"
             ref="upload"
-            :auto-upload="true"
+            :on-preview="handlePreview"
+            :on-remove="handleRemove"
+            :before-remove="beforeRemove"
           >
             <el-button
               :span="3"
@@ -113,6 +116,7 @@
         hidden="hidden"
         src="http://47.108.63.126:8001/song/download?singer=BEYOND&songname=海阔天空"
         controls="controls"
+        preload="false"
         @ended="nextPlay"
       >
         Your browser does not support the audio element.
@@ -198,6 +202,18 @@
 .uploadbutton {
   background: red;
 }
+::v-deep .el-upload-list__item-name{
+  display: none ! important;
+}
+::v-deep .el-icon-upload-success{
+  display: none ! important;
+}
+::v-deep .el-icon-circle-check{
+  display: none ! important;
+}
+::v-deep .el-upload .el-upload--text{
+  display: none ! important;
+}
 .el-row {
   margin-bottom: 20px;
   &:last-child {
@@ -234,6 +250,7 @@ export default {
       songs: [],
       srcs: [],
       index: 0,
+      fileList:null,
     };
   },
   created() {
