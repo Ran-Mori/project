@@ -17,19 +17,27 @@
           >
             播放全部</el-button
           >
-          <el-upload 
-          class="upload-demo" 
-          action="/api/song/upload"
-          accept="*/*"
-          ref="upload"
-          :auto-upload="true"
+          <el-upload
+            class="upload-demo"
+            action="/api/song/upload"
+            accept="*/*"
+            ref="upload"
+            :auto-upload="true"
           >
-            <el-button :span="3" size="small" type="info" class="el-icon-plus bg" round>上传音乐</el-button>  
+            <el-button
+              :span="3"
+              size="small"
+              type="info"
+              class="el-icon-plus bg"
+              round
+              >上传音乐</el-button
+            >
           </el-upload>
         </div>
       </div>
       <el-main class="main bg">
         <el-table
+          class="mytable"
           :cell-style="{ borderColor: '#2e2e2e' }"
           :header-cell-style="{
             background: '#2b2b2b',
@@ -57,18 +65,17 @@
             label="歌手"
             :width="screen_width * 0.3"
           >
-          </el-table-column>
+          </el-table-column >
           <el-table-column prop="name" label="歌名" :width="screen_width * 0.3">
           </el-table-column>
-          <el-table-column label="播放" :width="screen_width * 0.18">
+          <el-table-column label="播放" :width="screen_width * 0.18" align="center">
             <template slot-scope="scope">
               <el-button
                 class="el-icon-service"
                 @click="playSong(scope.$index)"
                 type="text"
                 size="small"
-              ></el-button
-              >
+              ></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -105,7 +112,6 @@
         ref="audio"
         hidden="hidden"
         src="http://47.108.63.126:8001/song/download?singer=BEYOND&songname=海阔天空"
-        preload="true"
         controls="controls"
         @ended="nextPlay"
       >
@@ -115,6 +121,16 @@
   </div>
 </template>
 <style scoped>
+::v-deep ::-webkit-scrollbar {
+  /*width: 0;宽度为0隐藏*/
+  width: 0px;
+}
+
+::v-deep ::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-radius: 2px;
+  background: #2b2b2b;
+}
 .header {
   position: absolute;
   left: 5%;
@@ -140,8 +156,8 @@
   background: #212124;
 }
 ::v-deep .el-table tbody tr:hover > td {
-      background-color: #373737;
- }
+  background-color: #373737;
+}
 .container {
   left: 5%;
   right: 5%;
@@ -151,7 +167,7 @@
 .el-icon-d-arrow-left {
   color: #d2d2d2;
 }
-.el-icon-service{
+.el-icon-service {
   color: red;
 }
 .twobutton {
@@ -159,11 +175,11 @@
   padding-left: 40px;
   padding-bottom: 100px;
 }
-.el-icon-caret-right{
+.el-icon-caret-right {
   float: left;
 }
 
-.upload-demo{
+.upload-demo {
   float: right;
   padding-left: 20px;
 }
@@ -231,7 +247,7 @@ export default {
             "&songname=" +
             songs[i].name
         );
-      };
+      }
       this.$refs.audio.src = this.srcs[0];
       this.index = songs.length - 1;
     });
@@ -262,13 +278,13 @@ export default {
       this.index = (this.index + 1) % this.srcs.length;
       this.playSong(this.index);
     },
-    cellMouseEnter: function(row){
-      console.log("enter")
+    cellMouseEnter: function (row) {
+      console.log("enter");
       console.log(row);
     },
-    playAll: function(){
+    playAll: function () {
       this.playSong(0);
-    }
+    },
   },
 };
 </script>
