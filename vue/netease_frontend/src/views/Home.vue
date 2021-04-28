@@ -291,6 +291,7 @@ export default {
     playSong: async function (index) {
       this.index = index;
       this.$refs.audio.src = this.srcs[index];
+      console.log(this.srcs)
       await this.$refs.audio.play();
     },
     playAndPause: function () {
