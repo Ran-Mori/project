@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home bg">
     <el-container class="container">
       <div class="header bg">
         <el-col :span="24"
@@ -38,9 +38,9 @@
           </el-upload>
         </div>
       </div>
-      <el-main class="main bg">
-        <el-table
-          class="mytable"
+      
+      <el-table
+          class="main"
           :cell-style="{ borderColor: '#2e2e2e' }"
           :header-cell-style="{
             background: '#2b2b2b',
@@ -59,20 +59,22 @@
           <el-table-column
             label="序号"
             type="index"
-            :width="screen_width * 0.2"
+            align="center"
+            :width="screen_width * 0.1"
           >
           </el-table-column>
           <el-table-column
             prop="singer"
             label="歌手"
-            :width="screen_width * 0.3"
+            align="center"
+            :width="screen_width * 0.4"
           >
           </el-table-column>
-          <el-table-column prop="name" label="歌名" :width="screen_width * 0.3">
+          <el-table-column prop="name" align="center" label="歌名" :width="screen_width * 0.3">
           </el-table-column>
           <el-table-column
             label="播放"
-            :width="screen_width * 0.18"
+            :width="screen_width * 0.2"
             align="center"
           >
             <template slot-scope="scope">
@@ -85,7 +87,6 @@
             </template>
           </el-table-column>
         </el-table>
-      </el-main>
       <el-footer class="footer">
         <el-row>
           <el-button
@@ -131,12 +132,18 @@
     </div>
   </div>
 </template>
+<style>
+  html{
+    overflow-y: hidden;
+    background: #212124;
+  }
+</style>
+</style>
 <style scoped>
 ::v-deep ::-webkit-scrollbar {
   /*width: 0;宽度为0隐藏*/
   width: 0px;
 }
-
 ::v-deep ::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
   border-radius: 2px;
@@ -144,15 +151,16 @@
 }
 .header {
   position: absolute;
-  left: 5%;
-  right: 5%;
+  left: 0%;
+  right: 0%;
   top: 0%;
   bottom: 88%;
+  overflow-y: scroll;
 }
 .main {
   position: absolute;
-  left: 5%;
-  right: 5%;
+  left: 0%;
+  right: 0%;
   top: 12%;
   bottom: 10%;
   overflow-y: scroll;
@@ -161,17 +169,16 @@
   position: absolute;
   top: 90%;
   bottom: 0%;
-  left: 5%;
-  right: 5%;
-  padding-top: 10px;
+  left: 0%;
+  right: 0%;
   background: #212124;
 }
 ::v-deep .el-table tbody tr:hover > td {
   background-color: #373737;
 }
 .container {
-  left: 5%;
-  right: 5%;
+  left: 0%;
+  right: 0%;
   top: 0%;
   bottom: 0%;
 }
@@ -189,7 +196,6 @@
 .el-icon-caret-right {
   float: left;
 }
-
 .upload-demo {
   float: right;
   padding-left: 20px;
@@ -208,6 +214,15 @@
 }
 .uploadbutton {
   background: red;
+}
+::v-deep .el-button--info:hover{
+  background: #212124;
+}
+::v-deep .el-button--info:focus{
+  background: #212124;
+}
+::v-deep .el-table{
+  background: #2b2b2b;
 }
 ::v-deep .stroke-width {
   line-height: 1.5;
@@ -232,6 +247,9 @@
 }
 ::v-deep .el-upload .el-upload--text {
   display: none !important;
+}
+::v-deep .el-table::before{
+  height: 0px;
 }
 </style>
 
@@ -266,7 +284,8 @@ export default {
         setTimeout(this.getNewMessage(), 0);
       }, 1000);
     });
-    this.screen_width = document.body.scrollWidth * 0.9;
+    this.screen_width = document.body.scrollWidth;
+    
   },
   methods: {
     playSong: async function (index) {
@@ -282,15 +301,15 @@ export default {
       }
     },
     previosPlay: function () {
-      if (this.index == 0) {
-        this.index = this.srcs.length - 1;
-      } else {
-        this.index = this.index - 1;
-      }
+      var length = this.songs.length;
+      var num = Math.floor(Math.random() * length);
+      this.index = num;
       this.playSong(this.index);
     },
     nextPlay: function () {
-      this.index = (this.index + 1) % this.srcs.length;
+      var length = this.songs.length;
+      var num = Math.floor(Math.random() * length);
+      this.index = num;
       this.playSong(this.index);
     },
     playAll: function () {
