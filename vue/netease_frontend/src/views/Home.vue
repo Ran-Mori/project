@@ -2,15 +2,12 @@
   <div class="home bg">
     <el-container class="container">
       <div class="header bg">
-        <el-col :span="24"
-          ><div class="bg font"><b>我的音乐云盘</b></div></el-col
-        >
-        <div :span="24" class="bg twobutton">
-          <el-button
-            :span="3"
+        
+        <el-button
+            :span="4"
             size="small"
             type="danger"
-            class="el-icon-caret-right"
+            class="playAllButton el-icon-caret-right"
             :show-file-list="false"
             @click="playAll()"
             :style="{ background: '#EC4141', paddingLeft: '15px' }"
@@ -19,13 +16,13 @@
             播放全部</el-button
           >
           <el-upload
-            class="upload-demo"
+            :span="4"
+            class="uploadButton"
             action="/api/song/upload"
             accept="*/*"
             ref="upload"
           >
             <el-button
-              :span="3"
               size="small"
               type="info"
               class="el-icon-plus bg"
@@ -36,7 +33,18 @@
               >上传音乐</el-button
             >
           </el-upload>
-        </div>
+          <el-col :span="14" class="title"><div class="bg font"><b>我的音乐云盘</b></div></el-col>
+
+          <el-input
+            :span="8"
+            placeholder="搜索"
+            class="searchBox"
+            v-model="search"
+            :value="search"
+            @blur="blur(search)"
+            clearable>
+          </el-input>
+
       </div>
       
       <el-table
@@ -149,6 +157,9 @@
   border-radius: 2px;
   background: #2b2b2b;
 }
+.title{
+  padding-top: 10px;
+}
 .header {
   position: absolute;
   left: 0%;
@@ -188,18 +199,36 @@
 .el-icon-service {
   color: red;
 }
-.twobutton {
-  float: left;
-  padding-left: 40px;
-  padding-bottom: 100px;
-}
 .el-icon-caret-right {
   float: left;
 }
-.upload-demo {
-  float: right;
-  padding-left: 20px;
+.playAllButton{
+  float: left;
+  margin-left: 40px;
+  margin-top: 35px;
 }
+.uploadButton {
+  float: left;
+  padding-left: 20px;
+  margin-top: 35px;
+}
+.searchBox{
+  float: right;
+  width: 19%;
+  margin-top: 35px;
+  padding-right: 40px;
+}
+::v-deep .el-input__inner {
+  height: 33px;
+  border-radius: 20px;
+  background-color: #2A2A2A;
+  border-color: #909399;
+  font-size: 12px;
+}
+::v-deep .el-input__inner:focus {
+  border-color: #909399;
+}
+
 .bg {
   background: #2b2b2b;
 }
@@ -211,9 +240,6 @@
   font-family: "黑体";
   font-size: 25px;
   margin-bottom: 7px;
-}
-.uploadbutton {
-  background: red;
 }
 ::v-deep .el-button--info:hover{
   background: #212124;
@@ -264,30 +290,33 @@ export default {
       fileList: null,
       timer: "",
       percent: 0,
+      search:""
     };
   },
   created() {
-    axios.get("/api/songs").then((response) => {
-      var songs = response.data.data.songs;
-      this.songs = songs;
-      for (var i = 0; i < songs.length; i++) {
-        this.srcs.push(
-          "http://47.108.63.126:8001/song/download?singer=" +
-            songs[i].singer +
-            "&songname=" +
-            songs[i].name
-        );
-      }
-      this.$refs.audio.src = this.srcs[0];
-      this.index = songs.length - 1;
-      window.setInterval(() => {
+    this.getAllSongs()
+    window.setInterval(() => {
         setTimeout(this.getNewMessage(), 0);
       }, 1000);
-    });
     this.screen_width = document.body.scrollWidth;
-    
+    this.$refs.audio.src = this.srcs[0];
   },
   methods: {
+    getAllSongs: function(){
+      axios.get("/api/songs").then((response) => {
+        var songs = response.data.data.songs;
+        this.songs = songs;
+        for (var i = 0; i < songs.length; i++) {
+          this.srcs.push(
+            "http://47.108.63.126:8001/song/download?singer=" +
+              songs[i].singer +
+              "&songname=" +
+              songs[i].name
+          );
+        }
+        this.index = songs.length - 1;
+      });
+    },
     playSong: async function (index) {
       this.index = index;
       this.$refs.audio.src = this.srcs[index];
@@ -320,6 +349,27 @@ export default {
       this.percent =
         (this.$refs.audio.currentTime * 100) / this.$refs.audio.duration;
     },
+    
+    blur: function(keyword){
+      if(keyword.length == 0){
+        this.getAllSongs();
+      }else{
+        axios.get("/api/songs/like/" + keyword).then((response) => {
+          var songs = response.data.data.songs;
+          this.songs = songs;
+          this.srcs = []
+          for (var i = 0; i < songs.length; i++) {
+            this.srcs.push(
+              "http://47.108.63.126:8001/song/download?singer=" +
+                songs[i].singer +
+                "&songname=" +
+                songs[i].name
+            );
+          }
+          this.index = songs.length - 1;
+        });
+      }
+    }
   },
   mounted() {
     var that = this;
