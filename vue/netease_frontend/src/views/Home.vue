@@ -306,6 +306,7 @@ export default {
       axios.get("/api/songs").then((response) => {
         var songs = response.data.data.songs;
         this.songs = songs;
+        this.srcs = []
         for (var i = 0; i < songs.length; i++) {
           this.srcs.push(
             "http://47.108.63.126:8001/song/download?singer=" +

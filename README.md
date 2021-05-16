@@ -416,7 +416,7 @@
 >           singer: 'song_singer',
 >           feeling: 'song_feeling'
 >   }
->   
+>     
 >   axios.put('/song/songs',this.song).then(response => {
 >       console.log(response)
 >   })
@@ -458,7 +458,7 @@
 >   ```bash
 >   发出的api地址： '/song/songs'
 >   实际访问的api地址： 'http://47.108.63.126/songs'
->   
+>     
 >   原理：所有以 '^/song' 开头的请求都走代理路径，将 '^/song' 变成 '' , 在拼上IP地址形成最终访问的api地址
 >   ```
 >
