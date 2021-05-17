@@ -42,6 +42,7 @@
             v-model="search"
             :value="search"
             @blur="blur(search)"
+            @keyup.enter.native="blur(search)"
             clearable>
           </el-input>
 
