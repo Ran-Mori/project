@@ -131,7 +131,7 @@
       <audio
         ref="audio"
         hidden="hidden"
-        src="http://47.108.63.126:8001/song/download?singer=BEYOND&songname=海阔天空"
+        src="http://110.42.200.147:8001/song/download?singer=BEYOND&songname=海阔天空"
         controls="controls"
         preload="false"
         @ended="nextPlay"
@@ -310,7 +310,7 @@ export default {
         this.srcs = []
         for (var i = 0; i < songs.length; i++) {
           this.srcs.push(
-            "http://47.108.63.126:8001/song/download?singer=" +
+            "http://110.42.200.147:8001/song/download?singer=" +
               songs[i].singer +
               "&songname=" +
               songs[i].name
@@ -362,7 +362,7 @@ export default {
           this.srcs = []
           for (var i = 0; i < songs.length; i++) {
             this.srcs.push(
-              "http://47.108.63.126:8001/song/download?singer=" +
+              "http://110.42.200.147:8001/song/download?singer=" +
                 songs[i].singer +
                 "&songname=" +
                 songs[i].name
